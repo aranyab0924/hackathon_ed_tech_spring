@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: hackathon_ed_tech
   config:
     import: optional:file:.env.properties
   security:
