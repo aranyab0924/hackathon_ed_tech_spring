@@ -16,12 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class HackathonEdTechApplication {
 
 	@GetMapping("/user")
-		public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
-			return Collections.singletonMap("name", principal.getAttribute("name"));
+	public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
+		if (principal == null) {
+			return Collections.singletonMap("error", "Not authenticated");
 		}
+		return Collections.singletonMap("name", principal.getAttribute("name"));
+	}
 
 	@GetMapping("/csrf")
 	public Map<String, String> csrf(CsrfToken token) {
+		if (token == null) {
+			return Collections.singletonMap("error", "CSRF token not available");
+		}
 		return Collections.singletonMap("token", token.getToken());
 	}
 

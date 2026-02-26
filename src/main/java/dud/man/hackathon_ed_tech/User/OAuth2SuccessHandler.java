@@ -16,6 +16,12 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
+    private final AuthorizationCodeStore authorizationCodeStore;
+
+    public OAuth2SuccessHandler(AuthorizationCodeStore authorizationCodeStore) {
+        this.authorizationCodeStore = authorizationCodeStore;
+    }
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
                                         HttpServletResponse response,
@@ -28,10 +34,14 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         claims.put("username", oauthUser.getAttribute("login"));
         claims.put("email", oauthUser.getAttribute("email"));
 
-        String token = JwtUtil.generateToken(claims);
+        // Generate a short-lived authorization code
+        String code = authorizationCodeStore.generateCode(claims);
+        
+        System.out.println("OAuth2 Success - Generated code: " + code);
+        System.out.println("Redirecting to: https://aranyab0924.github.io/hackathon_ed_tech/?code=" + code);
 
-        // Send JWT back in response (JSON)
-        response.setContentType("application/json");
-        response.getWriter().write("{\"token\": \"" + token + "\"}");
+        // Redirect to frontend with authorization code
+        String redirectUrl = "http://127.0.0.1:4000/hackathon_ed_tech/?code=" + code;
+        response.sendRedirect(redirectUrl);
     }
 }
