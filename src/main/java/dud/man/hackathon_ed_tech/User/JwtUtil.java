@@ -1,22 +1,32 @@
 package dud.man.hackathon_ed_tech.User;
-import java.security.Key;
 
-import org.springframework.stereotype.Component;
+import java.security.Key;
+import java.util.Date;
+import java.util.Map;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
-@Component
 public class JwtUtil {
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    // Secret key for signing JWTs
+    private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public String generateToken(User user) {
+    public static String generateToken(Map<String, Object> claims) {
         return Jwts.builder()
-                .setSubject(user.getId().toString())
-                .claim("username", user.getUsername())
+                .setClaims(claims)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) // 1 day
                 .signWith(key)
                 .compact();
+    }
+
+    public static Map<String, Object> parseToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
