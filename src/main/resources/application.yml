@@ -10,3 +10,17 @@ spring:
           github:
             clientId: ${GITHUB_CLIENT_ID}
             clientSecret: ${GITHUB_CLIENT_SECRET}
+  datasource:
+    url: jdbc:sqlite:volumes/sqlite.db
+    driver-class-name: org.sqlite.JDBC
+
+  jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: update   # use "create" if you want to reset each time
+    show-sql: true
+    
+app:
+  jwt:
+    secret: ${JWT_SECRET:1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef}
+    ttl-seconds: ${JWT_TTL_SECONDS:3600}

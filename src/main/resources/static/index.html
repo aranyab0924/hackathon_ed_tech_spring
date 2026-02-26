@@ -17,36 +17,11 @@
     </div>
     <div class="container authenticated" style="display:none">
         Logged in as: <span id="user"></span>
+        <div>
+            <button onClick="logout()" class="btn btn-primary">Logout</button>
+        </div>
     </div>
-    <div class="container authenticated">
-        Logged in as: <span id="user"></span>
-    <div>
-        <button onClick="logout()" class="btn btn-primary">Logout</button>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
-
     <script type="text/javascript">
-    // Get CSRF token from server
-    var csrfToken = '';
-    $.get('/csrf', function(data) {
-        csrfToken = data.token;
-        document.cookie = 'XSRF-TOKEN=' + csrfToken;
-    });
-
-    $.ajaxSetup({
-        beforeSend : function(xhr, settings) {
-            if (settings.type == 'POST' || settings.type == 'PUT'
-                || settings.type == 'DELETE') {
-            if (!(/^http:.*/.test(settings.url) || /^https:.*/
-                .test(settings.url))) {
-                // Only send the token to relative URLs i.e. locally.
-                xhr.setRequestHeader("X-XSRF-TOKEN", csrfToken);
-            }
-            }
-        }
-    });
-
-
     $.get("/user", function(data) {
         $("#user").html(data.name);
         $(".unauthenticated").hide()
@@ -57,9 +32,6 @@ const logout = function() {
     $.ajax({
         url: "/logout",
         type: "POST",
-        headers: {
-            "X-XSRF-TOKEN": csrfToken
-        },
         success: function() {
             $("#user").html('');
             $(".unauthenticated").show();

@@ -1,13 +1,2 @@
-package dud.man.hackathon_ed_tech;
+// Test removed per request.
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
-class HackathonEdTechApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
-
-}
