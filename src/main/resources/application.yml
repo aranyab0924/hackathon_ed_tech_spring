@@ -1,8 +1,14 @@
 spring:
   application:
     name: hackathon_ed_tech
+
   config:
     import: optional:file:.env.properties
+
+  datasource:
+    url: jdbc:sqlite:volumes/sqlite.db
+    driver-class-name: org.sqlite.JDBC
+
   security:
     oauth2:
       client:
@@ -10,3 +16,11 @@ spring:
           github:
             clientId: ${GITHUB_CLIENT_ID}
             clientSecret: ${GITHUB_CLIENT_SECRET}
+            scope:
+            - read:user
+
+  jpa:
+    database-platform: org.hibernate.community.dialect.SQLiteDialect
+    hibernate:
+      ddl-auto: create   # use "create" if you want to reset each time
+    show-sql: true

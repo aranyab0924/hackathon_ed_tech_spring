@@ -35,3 +35,5 @@ build/
 ### Env files ###
 .env
 .env.properties
+
+volumes/
